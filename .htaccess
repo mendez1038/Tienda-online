@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /tienda/
+
+  # Si el recurso existe (archivo o carpeta), NO reescribas
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Rutas "bonitas" -> index.php con controller/action/params
+  # / -> index.php (home)
+  RewriteRule ^$ index.php [L]
+
+  # /controlador  -> action=index por defecto
+  RewriteRule ^([^/]+)/?$ index.php?controller=$1&action=index [QSA,L]
+
+  # /controlador/accion
+  RewriteRule ^([^/]+)/([^/]+)/?$ index.php?controller=$1&action=$2 [QSA,L]
+
+  # /controlador/accion/lo-que-siga (params opcionales)
+  RewriteRule ^([^/]+)/([^/]+)/(.*)$ index.php?controller=$1&action=$2&params=$3 [QSA,L]
+
+  # (Opcional) página 404 amigable dentro de la app
+  # ErrorDocument 404 /tienda/error/index
+</IfModule>
